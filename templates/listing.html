@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title }} | سماحي يوسف – مدونتي التعليمية
+{% endblock %}
+
+{% block description %}
+{{ description }}
+{% endblock %}
+
+{% block content %}
+
+<!-- عنوان القسم -->
+
+<section class="page-header">
+
+    <div class="container">
+
+        <span class="page-header-label">مدونتي التعليمية</span>
+
+        <h1>{{ title }}</h1>
+
+        <p>{{ description }}</p>
+
+    </div>
+
+</section>
+
+
+<!-- محتوى القسم -->
+
+<section class="section">
+
+    <div class="container">
+
+        <!-- البحث -->
+
+        <div class="search-box">
+
+            <input
+                type="search"
+                id="contentSearch"
+                placeholder="ابحث في هذا القسم..."
+                aria-label="البحث في المحتوى"
+            >
+
+        </div>
+
+
+        <!-- التصنيفات -->
+
+        {% set categories = items | map(attribute='category') | select | unique | list %}
+
+        {% if categories %}
+
+        <div class="filter-bar">
+
+            <button
+                class="filter-button active"
+                data-filter="all"
+                type="button"
+            >
+                جميع المحتويات
+            </button>
+
+            {% for category in categories %}
+
+            <button
+                class="filter-button"
+                data-filter="{{ category }}"
+                type="button"
+            >
+                {{ category }}
+            </button>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- عدد النتائج -->
+
+        <div class="listing-info">
+
+            <p>
+                عدد المحتويات:
+                <strong id="visibleResultsCount">{{ items | length }}</strong>
+            </p>
+
+        </div>
+
+
+        <!-- بطاقات المحتوى -->
+
+        {% if items %}
+
+        <div class="cards-grid listing-grid">
+
+            {% for item in items %}
+
+            <article
+                class="card listing-card"
+                data-search-item
+                data-category="{{ item.category | default('عام') }}"
+            >
+
+                {% if item.image %}
+
+                <img
+                    src="{{ item.image }}"
+                    alt="{{ item.title }}"
+                    class="card-image"
+                    loading="lazy"
+                >
+
+                {% else %}
+
+                <div class="listing-placeholder">
+
+                    {% if section == "lessons" %}
+                    📖
+                    {% elif section == "articles" %}
+                    ✍️
+                    {% elif section == "files" %}
+                    📂
+                    {% else %}
+                    🎓
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="card-body">
+
+                    <span class="card-category">
+                        {{ item.category | default("عام") }}
+                    </span>
+
+                    <h3>{{ item.title }}</h3>
+
+                    <p>
+                        {{ item.description | default("اكتشف هذا المحتوى واستفد من موارده التعليمية.") }}
+                    </p>
+
+
+                    {% if item.date %}
+
+                    <div class="card-meta">
+
+                        <span>📅 {{ item.date }}</span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- رابط صفحة التفاصيل -->
+
+                    <div class="listing-actions">
+
+                        {% if section == "lessons" %}
+
+                        <a
+                            href="{{ url_for('lesson_detail', slug=item.slug) }}"
+                            class="card-link"
+                        >
+                            قراءة الدرس ←
+                        </a>
+
+                        {% elif section == "articles" %}
+
+                        <a
+                            href="{{ url_for('article_detail', slug=item.slug) }}"
+                            class="card-link"
+                        >
+                            قراءة المقال ←
+                        </a>
+
+                        {% elif section == "files" %}
+
+                        <a
+                            href="{{ url_for('file_detail', slug=item.slug) }}"
+                            class="card-link"
+                        >
+                            تفاصيل الملف ←
+                        </a>
+
+                        {% elif section == "courses" %}
+
+                        <a
+                            href="{{ url_for('course_detail', slug=item.slug) }}"
+                            class="card-link"
+                        >
+                            تفاصيل الدورة ←
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- لا توجد نتائج للبحث -->
+
+        <div id="noSearchResults" class="empty-state" hidden>
+
+            <div class="empty-icon">🔎</div>
+
+            <h3>لم نعثر على نتائج</h3>
+
+            <p>حاول استخدام كلمات بحث أخرى.</p>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- القسم فارغ -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                {% if section == "lessons" %}
+                📖
+                {% elif section == "articles" %}
+                ✍️
+                {% elif section == "files" %}
+                📂
+                {% else %}
+                🎓
+                {% endif %}
+
+            </div>
+
+            <h3>لا توجد محتويات منشورة حالياً</h3>
+
+            <p>
+                نعمل على إعداد وإضافة محتويات جديدة لهذا القسم.
+                يرجى زيارة المدونة لاحقاً.
+            </p>
+
+            <a
+                href="{{ url_for('home') }}"
+                class="btn btn-outline mt-20"
+            >
+                العودة إلى الرئيسية
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- دعوة للتواصل -->
+
+<section class="cta-section">
+
+    <div class="container cta-content">
+
+        <div>
+
+            <h2>هل تبحث عن محتوى معين؟</h2>
+
+            <p>
+                يمكنك التواصل معنا لاقتراح درس أو ملف أو موضوع تعليمي.
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('contact') }}" class="btn btn-light">
+            تواصل معنا
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

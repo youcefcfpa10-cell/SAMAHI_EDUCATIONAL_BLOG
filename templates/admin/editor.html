@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}{% block title %}{{ 'تعديل المحتوى' if item else 'إضافة محتوى' }} | {{ site_name }}{% endblock %}
+{% block admin_content %}
+<div class="admin-section-head"><h2>{{ 'تعديل المحتوى' if item else 'إضافة محتوى جديد' }}</h2><a href="{{ url_for('admin_dashboard') }}">العودة للقائمة</a></div>
+<form class="content-editor-form" method="post" enctype="multipart/form-data">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+<div class="editor-grid">
+<div class="editor-main">
+<label>عنوان المحتوى *</label><input name="title" required value="{{ item.title if item else '' }}" placeholder="اكتب عنوان المقال أو الدورة">
+<label>الرابط المختصر (اختياري)</label><input name="slug" value="{{ item.slug if item else '' }}" placeholder="يُنشأ تلقائياً من العنوان إذا تركته فارغاً">
+<label>وصف مختصر</label><textarea name="description" rows="3" placeholder="نبذة تظهر في بطاقات المدونة">{{ item.description if item else '' }}</textarea>
+<label>المحتوى الكامل</label><div class="editor-toolbar"><button type="button" data-command="bold"><b>عريض</b></button><button type="button" data-command="italic"><i>مائل</i></button><button type="button" data-command="insertUnorderedList">قائمة</button><button type="button" data-command="formatBlock" data-value="h2">عنوان فرعي</button><button type="button" data-command="createLink">رابط</button></div>
+<div id="richEditor" class="rich-editor" contenteditable="true">{{ item.content|safe if item else '' }}</div>
+<textarea id="contentSource" name="content" hidden></textarea>
+<p class="editor-hint">يمكنك تنسيق النص من الشريط أعلاه، ولإضافة صورة داخل النص استخدم زر إدراج الصورة في المتصفح أو أضف رابط صورة عبر المحرر.</p>
+</div>
+<aside class="editor-side">
+<label>نوع المحتوى *</label><select name="section" required>{% for key,label in labels.items() %}<option value="{{ key }}" {% if item and item.section==key %}selected{% elif not item and key=='articles' %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+<label>التخصص / التصنيف</label><input name="category" value="{{ item.category if item else '' }}" placeholder="مثلاً: الإعلام الآلي">
+<label>اسم الكاتب</label><input name="author" value="{{ item.author if item else 'سماحي يوسف' }}">
+<label>الصورة الرئيسية</label><input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">{% if item and item.image %}<img class="existing-preview" src="{{ item.image }}" alt=""><input type="hidden" name="existing_image" value="{{ item.image }}">{% endif %}
+<label>ملف قابل للتحميل</label><input type="file" name="download" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.webp">{% if item and item.download %}<a href="{{ item.download }}" target="_blank">الملف الحالي</a><input type="hidden" name="existing_download" value="{{ item.download }}">{% endif %}
+<label>حالة المحتوى</label><select name="status" id="statusSelect"><option value="draft" {% if not item or item.status=='draft' %}selected{% endif %}>مسودة</option><option value="published" {% if item and item.status=='published' %}selected{% endif %}>نشر فوري</option><option value="scheduled" {% if item and item.status=='scheduled' %}selected{% endif %}>جدولة النشر</option></select>
+<label>تاريخ ووقت النشر المجدول</label><input type="datetime-local" name="publish_at" value="{{ item.publish_at if item and item.publish_at else '' }}">
+<button class="btn btn-primary editor-save" type="submit">حفظ المحتوى</button>
+</aside></div></form>
+<script>
+const editor=document.getElementById('richEditor'), source=document.getElementById('contentSource');
+document.querySelectorAll('.editor-toolbar button').forEach(b=>b.addEventListener('click',()=>{
+ const c=b.dataset.command; if(c==='createLink'){const u=prompt('أدخل رابط الصفحة');if(u)document.execCommand(c,false,u);}
+ else document.execCommand(c,false,b.dataset.value||null);editor.focus();
+}));
+document.querySelector('.content-editor-form').addEventListener('submit',()=>source.value=editor.innerHTML);
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Virtual environment
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+ADMIN_CREDENTIALS.txt
+
+# Local database
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups
+backups/
+
+# Editor
+.vscode/
+.idea/
+
+# Operating system
+Thumbs.db
+.DS_Store
+# Uploaded private documents
+static/files/*
+static/uploads/*
+!static/uploads/.gitkeep

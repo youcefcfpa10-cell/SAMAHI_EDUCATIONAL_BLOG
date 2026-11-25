@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+
+    <meta name="description"
+          content="{% block description %}{{ site_description }}{% endblock %}">
+
+    <meta name="author" content="سماحي يوسف">
+    <meta name="theme-color" content="#003844">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+    <header class="site-header">
+
+        <div class="container header-container">
+
+            <a href="{{ url_for('home') }}" class="brand">
+                <span class="brand-icon">ي</span>
+
+                <span class="brand-text">
+                    <strong>سماحي يوسف</strong>
+                    <small>مدونتي التعليمية</small>
+                </span>
+            </a>
+
+            <button class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="فتح القائمة"
+                    aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+
+                <a href="{{ url_for('home') }}">الرئيسية</a>
+
+                <a href="{{ url_for('lessons') }}">الدروس</a>
+
+                <a href="{{ url_for('articles') }}">المقالات</a>
+
+                <a href="{{ url_for('files') }}">الملفات</a>
+
+                <a href="{{ url_for('courses') }}">الدورات</a>
+
+                <a href="{{ url_for('about') }}">عن المدونة</a>
+
+                <a href="{{ url_for('contact') }}" class="nav-contact">
+                    اتصل بنا
+                </a>
+
+            </nav>
+
+            <button class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="تغيير المظهر">
+                ◐
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="main-content">
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div class="footer-about">
+
+                <h3>سماحي يوسف – مدونتي التعليمية</h3>
+
+                <p>
+                    فضاء تعليمي يهدف إلى مشاركة الدروس والمقالات
+                    والملفات والدورات التدريبية مع الطلبة والأساتذة
+                    في قطاع التكوين المهني.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <h4>روابط مهمة</h4>
+
+                <a href="{{ url_for('about') }}">عن المدونة</a>
+
+                <a href="{{ url_for('contact') }}">اتصل بنا</a>
+
+                <a href="{{ url_for('privacy') }}">سياسة الخصوصية</a>
+
+                <a href="{{ url_for('terms') }}">شروط الاستخدام</a>
+
+            </div>
+
+
+            <div class="footer-contact">
+
+                <h4>تواصل معنا</h4>
+
+                <p>البريد الإلكتروني:</p>
+
+                <a href="mailto:YOUCEFCFPA10@GMAIL.COM">
+                    YOUCEFCFPA10@GMAIL.COM
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <div class="container">
+
+                <p>
+                    جميع الحقوق محفوظة ©
+                    <span id="currentYear"></span>
+                    سماحي يوسف
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <button id="backToTop"
+            class="back-to-top"
+            aria-label="العودة إلى الأعلى">
+        ↑
+    </button>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    {% block extra_scripts %}{% endblock %}
+
+</body>
+</html>

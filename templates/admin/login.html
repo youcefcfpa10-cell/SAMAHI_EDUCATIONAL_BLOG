@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}دخول المشرف | {{ site_name }}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static',filename='css/admin.css') }}">{% endblock %}
+{% block content %}<section class="admin-login-wrap"><div class="admin-login">
+<div class="admin-login-mark">ي</div><span class="admin-kicker">منطقة خاصة بالمشرف</span><h1>تسجيل الدخول</h1><p>هذه الصفحة مخصصة لإدارة محتوى المدونة.</p>
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="admin-alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+<label>اسم المستخدم</label><input name="username" required autocomplete="username" autofocus>
+<label>كلمة المرور</label><input type="password" name="password" required autocomplete="current-password">
+<button class="btn btn-primary" type="submit">دخول لوحة التحكم</button></form><a class="back-site" href="{{ url_for('home') }}">العودة إلى المدونة</a></div></section>{% endblock %}

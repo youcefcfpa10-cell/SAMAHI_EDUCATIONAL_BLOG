@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}الرئيسية | مدونة سماحي يوسف التعليمية{% endblock %}
+{% block description %}فضاء تعليمي لمشاركة الدروس والمقالات والملفات والدورات في قطاع التكوين المهني.{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="container hero-content">
+    <span class="hero-badge">مرحباً بكم في مدونتي التعليمية</span>
+    <h1>المعرفة طريقنا نحو <span>التميز والإبداع</span></h1>
+    <p>فضاء تعليمي يجمع الدروس والمقالات والموارد الرقمية والدورات التدريبية لدعم التعلم والتطوير المهني.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('lessons') }}" class="btn btn-primary">اكتشف الدروس</a>
+      <a href="{{ url_for('courses') }}" class="btn btn-outline">استكشف الدورات</a>
+    </div>
+  </div>
+</section>
+
+{% if latest_articles %}
+<section class="content-section container">
+  <div class="section-heading"><div><h2>أحدث المقالات</h2></div><a href="{{ url_for('articles') }}" class="view-all">جميع المقالات ←</a></div>
+  <div class="content-grid">
+    {% for item in latest_articles %}<article class="content-card">
+      {% if item.image %}<img src="{{ item.image }}" alt="{{ item.title }}" loading="lazy">{% endif %}
+      <div class="card-body"><span class="content-label">مقال</span><h3>{{ item.title }}</h3><p>{{ item.description }}</p><a href="{{ url_for('article_detail', slug=item.slug) }}">اقرأ المقال ←</a></div>
+    </article>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if latest_files %}
+<section class="content-section container">
+  <div class="section-heading"><div><h2>الملفات والموارد التعليمية</h2></div><a href="{{ url_for('files') }}" class="view-all">جميع الملفات ←</a></div>
+  <div class="content-grid">
+    {% for item in latest_files %}<article class="content-card resource-card"><div class="card-body"><span class="content-label">ملف تعليمي</span><h3>{{ item.title }}</h3><p>{{ item.description }}</p><a href="{{ url_for('file_detail', slug=item.slug) }}">تفاصيل الملف ←</a></div></article>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if latest_courses %}
+<section class="content-section container">
+  <div class="section-heading"><div><h2>الدورات التدريبية</h2></div><a href="{{ url_for('courses') }}" class="view-all">جميع الدورات ←</a></div>
+  <div class="content-grid">
+    {% for item in latest_courses %}<article class="content-card">
+      {% if item.image %}<img src="{{ item.image }}" alt="{{ item.title }}" loading="lazy">{% endif %}
+      <div class="card-body"><span class="content-label">دورة تدريبية</span><h3>{{ item.title }}</h3><p>{{ item.description }}</p><a href="{{ url_for('course_detail', slug=item.slug) }}">تفاصيل الدورة ←</a></div>
+    </article>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="about-section container">
+  <div class="about-photo-wrap"><img class="about-photo" src="{{ url_for('static', filename='img/profile1.jpeg') }}" alt="الصورة الشخصية لسماحي يوسف" onerror="this.hidden=true; this.nextElementSibling.hidden=false"><div class="about-photo-fallback" hidden>سماحي يوسف</div></div>
+  <div class="about-content"><span class="section-subtitle">من أنا</span><h2>سماحي يوسف</h2><p class="author-role">مفتش تقني وبيداغوجي</p><p>مهتم بالتكوين والتعليم وتكنولوجيا المعلومات وتطوير الموارد التعليمية الرقمية. أشارك عبر هذه المدونة المعرفة والموارد التي تساعد الطلبة والأساتذة والمهتمين بقطاع التكوين المهني.</p><a href="{{ url_for('about') }}" class="btn btn-outline">تعرف عليّ أكثر</a></div>
+</section>
+{% endblock %}

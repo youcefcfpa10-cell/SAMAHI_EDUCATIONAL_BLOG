@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}{% block title %}لوحة التحكم | {{ site_name }}{% endblock %}
+{% block admin_content %}
+{% if request.endpoint == 'admin_dashboard' %}
+<div class="admin-stats">
+{% for key,label in [('articles','المقالات'),('courses','الدورات'),('lessons','الدروس'),('files','الملفات')] %}<div class="admin-stat"><span>{{ label }}</span><strong>{{ counts[key] }}</strong></div>{% endfor %}
+</div>
+<div class="admin-status-line"><span>منشور: <b>{{ statuses.published }}</b></span><span>مسودات: <b>{{ statuses.draft }}</b></span><span>مجدول: <b>{{ statuses.scheduled }}</b></span></div>
+<div class="admin-section-head"><h2>المحتويات وإدارتها</h2><a class="btn btn-primary" href="{{ url_for('admin_editor') }}">＋ إضافة محتوى جديد</a></div>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>العنوان</th><th>القسم</th><th>الحالة</th><th>تاريخ النشر / الجدولة</th><th>الإجراءات</th></tr></thead><tbody>
+{% for item in items %}<tr><td><strong>{{ item.title }}</strong></td><td>{{ labels[item.section] }}</td><td><span class="status status-{{ item.status }}">{{ {'draft':'مسودة','scheduled':'مجدول','published':'منشور'}.get(item.status,item.status) }}</span></td><td>{{ item.publish_at or '—' }}</td><td class="admin-actions"><a href="{{ url_for('admin_editor',item_id=item.id) }}">تعديل</a>{% if item.status == 'published' %}<a target="_blank" href="{{ url_for(item.section[:-1] + '_detail' if item.section != 'files' else 'file_detail',slug=item.slug) }}">عرض</a>{% endif %}<form method="post" action="{{ url_for('admin_delete',item_id=item.id) }}" onsubmit="return confirm('هل تريد حذف هذا المحتوى نهائياً؟')"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">حذف</button></form></td></tr>
+{% else %}<tr><td colspan="5" class="empty-admin">لا يوجد محتوى بعد. ابدأ بإضافة أول مقال أو دورة.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}{% endblock %}

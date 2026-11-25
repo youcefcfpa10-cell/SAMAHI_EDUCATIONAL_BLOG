@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ item.title }} | مدونة سماحي يوسف التعليمية
+{% endblock %}
+
+{% block content %}
+
+<section class="detail-page">
+
+    <div class="detail-breadcrumb">
+        <a href="{{ url_for('home') }}">الرئيسية</a>
+        <span>←</span>
+        <a href="{{ url_for(section) }}">{{ section_title }}</a>
+        <span>←</span>
+        <span>{{ item.title }}</span>
+    </div>
+
+
+    <header class="detail-header">
+
+        <span class="content-label">
+            {{ detail_type }}
+        </span>
+
+        <h1>{{ item.title }}</h1>
+
+        {% if item.description %}
+        <p class="detail-description">
+            {{ item.description }}
+        </p>
+        {% endif %}
+
+        {% if item.date %}
+        <div class="detail-date">
+            تاريخ النشر: {{ item.date }}
+        </div>
+        {% endif %}
+
+    </header>
+
+
+    {% if item.image %}
+    <div class="detail-image">
+        <img
+            src="{{ item.image }}"
+            alt="{{ item.title }}"
+        >
+    </div>
+    {% endif %}
+
+
+    <article class="detail-content">
+
+        {% if item.content %}
+            {{ item.content | safe }}
+        {% elif item.body %}
+            {{ item.body | safe }}
+        {% else %}
+            <p>سيتم إضافة المحتوى الكامل قريباً.</p>
+        {% endif %}
+
+    </article>
+
+
+    {% if item.attachments %}
+    <section class="detail-attachments">
+
+        <h2>الملفات والمرفقات</h2>
+
+        <div class="attachments-list">
+
+            {% for attachment in item.attachments %}
+
+            <div class="attachment-item">
+
+                <span>
+                    {{ attachment.title or attachment.name or "ملف مرفق" }}
+                </span>
+
+                <a
+                    href="{{ attachment.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    عرض أو تحميل الملف
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+    {% endif %}
+
+
+    {% if item.download %}
+    <div class="detail-download">
+
+        <a
+            href="{{ item.download }}"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            تحميل الملف
+        </a>
+
+    </div>
+    {% endif %}
+
+
+    {% if item.author %}
+    <div class="detail-author">
+        إعداد: {{ item.author }}
+    </div>
+    {% endif %}
+
+
+    <div class="detail-footer">
+
+        <a
+            href="{{ url_for(section) }}"
+            class="btn btn-outline"
+        >
+            العودة إلى {{ section_title }}
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

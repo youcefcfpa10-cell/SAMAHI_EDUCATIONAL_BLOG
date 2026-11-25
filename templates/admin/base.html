@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static',filename='css/admin.css') }}">{% endblock %}
+{% block content %}
+<section class="admin-shell container">
+  <div class="admin-top"><div><span class="admin-kicker">لوحة الإدارة</span><h1>إدارة مدونتي التعليمية</h1><p>مرحباً {{ session.get('admin_username','') }}</p></div>
+  <div class="admin-nav"><a href="{{ url_for('admin_dashboard') }}">الرئيسية</a><a href="{{ url_for('admin_editor') }}">إضافة محتوى</a><a href="{{ url_for('admin_password') }}">كلمة المرور</a>
+  <form method="post" action="{{ url_for('admin_logout') }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-outline" type="submit">خروج</button></form></div></div>
+  {% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}{% for category,message in messages %}<div class="admin-alert {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+  {% block admin_content %}{% endblock %}
+</section>
+{% endblock %}
